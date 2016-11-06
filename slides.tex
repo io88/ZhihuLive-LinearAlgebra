@@ -1,0 +1,402 @@
+\documentclass[CJK]{beamer}
+\mode<presentation>{}
+
+\usepackage{url}
+
+\usepackage{luatexja-fontspec}
+\setmainjfont{KaitiSC}
+\usefonttheme[onlymath]{serif}
+\setbeamercolor{math text}{fg=black!15!blue}
+\linespread{1.3}
+\usepackage{tikz} 
+\usetikzlibrary{intersections,backgrounds}
+
+\usepackage{systeme}
+
+%% preamble
+\title{线性代数入门}
+\subtitle{几个基本概念}
+\author{Zhihu: tempo}
+\date{2016 年 11 月 6 日}
+
+\graphicspath {{images/}}
+
+\begin{document}
+
+%% title frame
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{写在前面}
+\begin{itemize}
+	\item 提纲里已经说了，这次 Live 涉及的是比较基本的概念。有些概念可能部分人已经学过，但还是希望大家耐心些。末尾的互动环节可以自由提问。
+	\item 关于方法论简单讲几句：
+	\begin{enumerate}
+	\setlength\itemsep{0.5em}
+	\item 重视 ``算法''（参见前面的讨论）。
+	\item 对初学者而言，算法只有一个，即\alert{高斯消元法}，待会会详细讲。
+	\item 重视概念：\alert{线性映射}的概念最重要，然后是抽象的\alert{线性空间}。
+	\item 熟悉代数运算
+    \end{enumerate}
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{写在前面}
+\begin{itemize}
+	\setlength\itemsep{1.5em}
+	\item 由于 Live 的限制，我会尽量连贯地用语音说，说 15-20 分钟再停下来搜集一下反馈，否则信息的强度没法保证。
+    \item 剩下的时间主要讨论数学。
+
+\end{itemize}
+\end{frame}
+
+%% normal frame
+\begin{frame}
+\frametitle{开讲}
+考虑一个简单的问题，如何描述：
+\[
+\systeme*{w + x + y - z = 0 , x - 2y + 3z = 0}
+\]
+的解集？（$w, x, y, z\in \mathbb{R}$）
+\end{frame}
+
+\begin{frame}
+\frametitle{中学就会的技巧}
+	第一个方程减去第二个方程，得
+\[
+\systeme*{w + 3y - 4z = 0, x - 2y + 3z = 0}
+\]
+移项
+\[
+\systeme*{w = -3y + 4z, x = 2y - 3z}
+\]
+\end{frame}
+
+\begin{frame}
+\frametitle{观察}
+对任意取定的$y = y_0, z = z_0\in \mathbb R$, 由
+\[
+\systeme*{w = -3y + 4z, x = 2y - 3z}
+\]
+确定 $w, x$ 的值，则得到唯一的一组解 $(w,x,y,z)$.
+\[
+\systeme*{w = -3y_0 + 4z_0, x = 2y_0 - 3z_0, y = y_0, z = z_0}
+\]
+\end{frame}
+
+\begin{frame}
+\frametitle{什么是线性代数}
+所以，任意两个实数$y_0, z_0\in \mathbb R$ 都决定了一组解。解空间是 ``\alert{二维}''的。不正式地说，给定四个\alert{变量}，两个\alert{方程}，解空间的\alert{自由度}是 $4 - 2 = 2.$
+
+\vspace{12px}
+
+现在来回答这个问题——什么是线性代数？
+
+\begin{itemize}
+    \item （入门级）线性代数就是把上面这句话\alert{严格化}的过程。
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{为什么要严格化}
+例如
+\[
+\systeme*{w + x + y - z = 0 , x - 2y + 3z = 0, w + 2x - y + 2z = 0}
+\]
+虽然有三个方程，但是因为\alert{第三个是前两个之和}，所以解空间的维数还是$2$. 
+
+怎么从概念上把这件事情说清楚呢？
+
+\begin{itemize}
+    \item （悄悄地告诉学过的人）系数矩阵的秩 (rank) 等于$2$。
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{方程组的向量形式和矩阵形式}
+最初那个方程，可以写成\alert{向量形式}
+\[
+w\begin{pmatrix} 1 \\ 0 \end{pmatrix} + x \begin{pmatrix} 1  \\ 1 \end{pmatrix}+ y\begin{pmatrix} 1 \\ -2 \end{pmatrix} + z\begin{pmatrix} -1 \\ 3 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix}
+\]
+——哪些系数使得平面上的这四个向量的\alert{线性组合}是零向量？
+
+\end{frame}
+
+\begin{frame}
+\frametitle{线性相关/线性无关}
+给定一组向量$\{v_1, v_2, ... , v_n\}\subset \mathbb R^m$, 如果$a_1v_1 + \cdots + a_n v_n = \vec{0}$ 有\alert{非零解} $(a_1, a_2, \ldots, a_n)$, 则说这组向量是线性相关的。
+
+\begin{itemize}
+	\item 上面的四个 $\mathbb R^2$ 中的向量是线性相关的。
+	\item $\begin{pmatrix} 1 \\ 0 \end{pmatrix}, \begin{pmatrix} 1  \\ 1\end{pmatrix}$ 是线性无关的。
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+
+\frametitle{方程组的向量形式和矩阵形式}
+最初那个方程，也可以写成\alert{矩阵形式}
+\[
+\begin{pmatrix} 1 & 1 & 1 & -1 \\ 0 & 1 & -2 & 3 \end{pmatrix} \begin{pmatrix} w \\ x \\ y \\ z \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix}
+\]
+——$\mathbb{R}^4$中的哪些向量在线性变换
+\[T: \vec{v}\mapsto A\vec{v}\] 
+下被映射到$\vec{0}\in\mathbb{R}^2$？（$A$ 是上面的矩阵。）
+
+\end{frame}
+
+\begin{frame}
+\frametitle{$\mathbb R ^n$ 到 $\mathbb R ^m$ 的线性映射}
+
+对于映射（多元向量值函数）$T:\mathbb R ^n\to \mathbb R ^m$，如果 $T$ 满足 $T(a\vec{u}+b\vec{v}) = aT(\vec{u})+bT(\vec{v})$, 则称 $T$ 是 $\mathbb R ^n$ 到 $ \mathbb R ^m$ 的\alert{线性映射}。
+
+\begin{itemize}
+    \item 任意一个$\mathbb R ^n$ 到 $\mathbb R ^m$ 的线性映射都可以写成$\vec{v}\mapsto A\vec{v}$的形式。
+    \item $T\begin{pmatrix} x \\ y \end{pmatrix} = 3x + 2y$ 是$\mathbb R ^2$ 到 $\mathbb R ^1$ 的线性映射。
+    \item $\sin : \mathbb R \to \mathbb R$ \alert{不是}线性映射。因为$\sin(x+y)\neq \sin x + \sin y$.
+    \item $f(x) = x^2 : \mathbb R \to \mathbb R$ \alert{不是}线性映射。因为$(x+y)^2\neq x^2 + y^2$.
+    \item 这是这门课里\alert{最重要的概念}之一，多花点时间。
+\end{itemize}
+
+
+\end{frame}
+
+\begin{frame}
+\frametitle{不可轻视的``重写''}
+虽然几种方程组写法是\alert{等价}的。但是却能带来概念上的飞跃。
+
+\begin{itemize}
+    \item 最初的写法（传统的线性方程组）更关心方程的\alert{单个解}。
+    \item 向量的线性组合更多地从\alert{几何的角度}观察。
+    \item 矩阵形式引入了一个\alert{函数（线性映射）}，更加从整体的角度考虑。
+    \item 不仅要解方程$A\vec{v} = \vec{0}$, 还要对任意的$\vec{b}$解方程$A\vec{v} = \vec{b}$.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+	有问题可以提问，提问完讲\alert{高斯消元法}。
+\end{frame}
+
+\begin{frame}
+\frametitle{高斯消元法}
+	高斯消元法只不过是把我们熟悉的``考虑方程$(1)$减去$3\times$方程$(2)$''的过程\alert{系统化}而已。
+	但这很可能是很多人接触到的第一个\alert{算法}（竖式乘法不算的话），所以我们详细讲讲。
+
+考虑方程
+
+\[
+A\vec{v} = \begin{pmatrix} 1 & 1 & 1 & -1 & 1 \\ 2 & 3 & -2 & 3 & 1 \\ 0 & 3 & -2 & 3 & 1 \end{pmatrix} \begin{pmatrix} u \\ w \\ x \\ y \\ z \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \\ 0 \end{pmatrix}
+\]
+
+如何\alert{描述一个程序}，使得计算机也可以解这个方程组？
+
+\end{frame}
+
+\begin{frame}
+\frametitle{``算法''——行变换}
+\[
+\begin{pmatrix} 
+1 & 1 & 1 & -1 & 1 \\ 
+2 & 3 & 2 & 1 & 2 \\ 
+0 & 3 & 1 & 8 & 1 
+\end{pmatrix} \rightarrow
+\begin{pmatrix} 
+1 & 1 & 1 & -1 & 1 \\ 
+0 & 1 & 0 & 3 & 0 \\ 
+0 & 3 & 1 & 8 & 1 
+\end{pmatrix} \rightarrow
+\begin{pmatrix} 
+1 & 1 & 1 & -1 & 1 \\ 
+0 & 1 & 0 & 3 & 0 \\ 
+0 & 0 & 1 & -1 & 1 
+\end{pmatrix} 
+\]
+\[
+\rightarrow
+\begin{pmatrix} 
+1 & 0 & 1 & -4 & 1 \\ 
+0 & 1 & 0 & 3 & 0 \\ 
+0 & 0 & 1 & -1 & 1 
+\end{pmatrix} 
+\rightarrow
+\begin{pmatrix} 
+1 & 0 & 0 & -3 & 0 \\ 
+0 & 1 & 0 & 3 & 0 \\ 
+0 & 0 & 1 & -1 & 1 
+\end{pmatrix} 
+\]
+\end{frame}
+
+\begin{frame}
+\frametitle{包治百病的高斯消元法}
+高斯消元法，也就是初等的行变换，能解决的问题很多。包括但不限于
+\begin{itemize}
+	\item 解线性方程组
+	\item 判断线性相关/线性无关
+	\item 矩阵求逆（$(A,I)$经过初等行变换可以变成$(I, A^{-1})$）
+	\item 求矩阵的秩（最后的矩阵里首项的$1$的个数）
+	\item 计算行列式（用到高斯消元法的一个变体）
+	\item 找子空间的一组基
+	\item ......
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{从``算法''的结果读取答案}
+回到上面的问题，最后一个矩阵对应的方程组是
+$
+\systeme*{u = 3y , w = -3y, x = y - z}
+$
+
+所以$y, z$ 是\alert{自由变量}，任意一个解都可以写成
+\[
+\begin{pmatrix} u \\ w \\ x \\ y \\ z \end{pmatrix} =  y_0\begin{pmatrix} 3 \\ -3 \\ 1 \\ 1 \\ 0 \end{pmatrix}+ z_0\begin{pmatrix} 0 \\ 0 \\ -1 \\ 0 \\ 1 \end{pmatrix}
+\]
+	
+\end{frame}
+
+\begin{frame}
+\frametitle{对解集的描述}
+进一步考察上面的例子。上述方程组的\alert{解集}是$\mathbb R^5$ 的一个子集。
+
+这是 $\mathbb R^5$ 的一个二维\alert{子空间}（线性空间的概念待会会进一步讲）。
+
+有两个向量$\begin{pmatrix} 3 \\ -3 \\ 1 \\ 1 \\ 0 \end{pmatrix}, \begin{pmatrix} 0 \\ 0 \\ -1 \\ 0 \\ 1 \end{pmatrix}$ 使得任意一个解都\alert{可以唯一地表示}成上述两个向量的线性组合。
+
+这样的两个向量叫做这个子空间的一组\alert{基}（basis）。基里向量的个数叫做这个子空间的\alert{维数}。
+
+\end{frame}
+
+\begin{frame}
+\frametitle{基的意义}
+$k$维子空间的一组\alert{基}给定了把子空间和$\mathbb R^k$ \alert{等同}的一种方式。
+
+把$\begin{pmatrix} 3 \\ -3 \\ 1 \\ 1 \\ 0 \end{pmatrix}, \begin{pmatrix} 0 \\ 0 \\ -1 \\ 0 \\ 1 \end{pmatrix}$ 取作上述子空间的一组基。在\alert{取定了这组基}的情况下，$\begin{pmatrix} u \\ w \\ x \\ y \\ z \end{pmatrix}$ 包含的信息，和$\begin{pmatrix} y_0\\z_0 \end{pmatrix}$ 一样多。
+\end{frame}
+
+\begin{frame}
+\frametitle{基的意义：子空间里的坐标}
+也就是说，由于这个子空间是个二维的（平面），我们可以\alert{选一个坐标系}，使得里面每个点，都有唯一的坐标$\begin{pmatrix} y_0\\z_0 \end{pmatrix}$.
+
+例子：
+
+$\begin{pmatrix} 3 \\ -3 \\ 0 \\ 1 \\ 1\end{pmatrix}$ 的坐标就是 $\begin{pmatrix} 1\\1 \end{pmatrix}$
+
+注意，\alert{对于不同的基，坐标不一样}。
+\end{frame}
+
+\begin{frame}
+\frametitle{$\mathbb R^n$ 的子空间}
+
+定义：对 $\mathbb R^n$ 的子集 $V \subset \mathbb R^n$, 如果对于任意的 $u, v\in V, a, b\in \mathbb R$, 都有 $au+bv\in V$, 则说 $V$ 是 $\mathbb R^n$ 的子空间。
+\vspace{12px}
+
+一句话：``子空间就是\alert{对线性组合封闭}的子集''。
+
+（任意两个子空间中的向量线性组合之后还在子空间中）
+\vspace{12px}
+
+也可以分成两点验证：
+\begin{itemize}
+    \item 如果对于任意的 $u, v\in V$, 都有 $u+v\in V$.
+    \item 如果对于任意的 $v\in V, c\in \mathbb R$, 都有 $cv\in V$.
+\end{itemize}
+就说 $V$ 是 $\mathbb R^n$ 的子空间。
+
+\end{frame}
+
+\begin{frame}
+\frametitle{$\mathbb R^n$ 的子空间的具体形态}
+
+对于 $m \times n$ 矩阵 $A$，考虑由$\vec{v}\mapsto A\vec{v}$ 定义的线性映射 $T:\mathbb R ^n\to \mathbb R ^m$，则
+\begin{itemize}
+    \item （零空间是子空间）$\{\vec{v}\in\mathbb{R}^n|A\vec{v} = \vec{0}\}$ 是 $\mathbb R ^n$ 的子空间。
+    \item （像是子空间）$\{\vec{b}\in\mathbb{R}^m|A\vec{v} = \vec{b}\text{有解}\}$ 是 $\mathbb R ^m$ 的子空间。
+\end{itemize}
+
+要描述$\mathbb R^n$的一个子空间，找一个线性映射把它描述成其零空间或者像。
+\end{frame}
+
+\begin{frame}
+\frametitle{为什么要研究 $\mathbb R^n$ 的子空间？}
+因为子空间极大地简化了问题的复杂性。前面我们考虑了$\mathbb R^5$ 的一个二维子空间。$\mathbb R^5$ 中的一个向量要用$5$个数字描述，但是，如果我们知道它是那个子空间中的向量，就只需要用$2$个数字来描述，所以问题变简单了。
+
+\vspace{12px}
+
+建议大家不要用``$n$维向量''这种说法。维数永远是用来描述线性空间或者子空间的。
+
+\vspace{12px}
+
+如果从 $5$ 到 $2$ 的简化让人印象不够深刻的话，可以说个实际的用途，比如机器学习最简单的例子，识别手写的数字，每张图片（$28\text{px}\times 28\text{px}$）都是 $28\times 28 = 784$ 维线性空间中的一个向量……
+\end{frame}
+
+\begin{frame}
+\frametitle{应用：说说机器学习吧}
+只讲最基本的例子，即 MNIST 的手写数字分类问题。
+\vspace{12px}
+\includegraphics[height=6cm]{mnist.jpeg}
+\end{frame}
+
+\begin{frame}
+\frametitle{三句话解释神经网络}
+这个问题是这样解决的
+
+\begin{itemize}
+    \item 每张图片（$28\text{px}\times 28\text{px}$）都是 $\mathbb{R}^{28\times 28 = 784}$ 中的一个向量
+
+    \item 希望找一个映射$T$把它映射到 $\mathbb R^{10}$, 使得
+
+\begin{itemize}
+    \item  如果一个图片$v$上的数字是$1$, 则$Tv = (1,0,0,..., 0)$ 
+    \item  如果一个图片$v$上的数字是$2$, 则$Tv = (0,1,0,..., 0)$ 
+    \item  ...... 
+    \item  如果一个图片$v$上的数字是$0$, 则$Tv = (0,0,0,..., 1)$ 
+\end{itemize}
+
+	\item 能找到，问题就解决了。
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{三句话解释神经网络}
+
+对 $\mathbb{R}^{n}$ 里的向量组成的数据集。
+\begin{itemize}
+	\item 用线性变换和一种固定的非线性变换来提取特征，变到另一个线性空间里。
+	\item 继续用线性变换和那个固定的非线性变换来提取特征，再变到另一个线性空间里。
+	\item ......
+	\item 直到最后落在 $\mathbb R^{10}$ 中。
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{三句话解释神经网络}
+
+\begin{itemize}
+	\item 根据误差反馈来的信息来修正我们假设的线性变换，以减小误差。
+	\item ——修正的依据是多元微积分里的链式法则。
+	\vspace{12px}
+	\item 误差较小的时候能得到比较精确的结果。
+	\item \alert{理论上}只用到一点多元微积分和线性代数——不超过大学二年级的数学。
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{谢谢大家}
+自由提问时间
+\end{frame}
+
+
+
+\end{document}
